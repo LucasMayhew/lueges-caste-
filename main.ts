@@ -25,7 +25,72 @@ namespace myTiles {
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
 `
+    //% blockIdentity=images._tile
+    export const tile1 = img`
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+2 b b 2 2 b 2 b 2 b 2 b b 2 2 b 
+2 b b 2 b b 2 b 2 b 2 b b 2 b b 
+2 b b 2 2 b 2 b 2 b 2 b b 2 2 b 
+2 b b 2 b b 2 b 2 b 2 b b 2 b b 
+2 2 b 2 2 b b 2 b b 2 2 b 2 2 b 
+b b b b b b b b b b b b b b b b 
+b b b b b 2 2 b b b b b b b b b 
+b b b b b b 2 b b b b b b b b b 
+b b b b b b 2 b b b b b b b b b 
+b b b b b b 2 b b b b b b b b b 
+b b b b b 2 2 2 b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+`
+    //% blockIdentity=images._tile
+    export const tile2 = img`
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+2 b b 2 2 b 2 b 2 b 2 b b 2 2 b 
+2 b b 2 b b 2 b 2 b 2 b b 2 b b 
+2 b b 2 2 b 2 b 2 b 2 b b 2 2 b 
+2 b b 2 b b 2 b 2 b 2 b b 2 b b 
+2 2 b 2 2 b b 2 b b 2 2 b 2 2 b 
+b b b b b b b b b b b b b b b b 
+b b b b b b 2 2 b b b b b b b b 
+b b b b b b b b 2 b b b b b b b 
+b b b b b b 2 2 b b b b b b b b 
+b b b b b b 2 b b b b b b b b b 
+b b b b b b 2 2 2 b b b b b b b 
+b b b b b b b b b b b b b b b b 
+`
+    //% blockIdentity=images._tile
+    export const tile3 = img`
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+2 b b 2 2 b 2 b 2 b 2 b b 2 2 b 
+2 b b 2 b b 2 b 2 b 2 b b 2 b b 
+2 b b 2 2 b 2 b 2 b 2 b b 2 2 b 
+2 b b 2 b b 2 b 2 b 2 b b 2 b b 
+2 2 b 2 2 b b 2 b b 2 2 b 2 2 b 
+b b b b b b b b b b b b b b b b 
+b b b b b b 2 2 b b b b b b b b 
+b b b b b b b b 2 b b b b b b b 
+b b b b b b 2 2 b b b b b b b b 
+b b b b b b b b 2 b b b b b b b 
+b b b b b b 2 2 b b b b b b b b 
+b b b b b b b b b b b b b b b b 
+`
 }
+controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
+    blockSettings.clear()
+    game.reset()
+})
+scene.onOverlapTile(SpriteKind.Player, myTiles.tile1, function (sprite, location) {
+    level = "level_1"
+    level_1()
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.uper, function (sprite, otherSprite) {
     if (x) {
         otherSprite.setImage(img`
@@ -72,9 +137,13 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.uper, function (sprite, otherSpr
     pause(1)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.gost, function (sprite, otherSprite) {
-    music.wawawawaa.play()
-    info.changeLifeBy(-1)
-    pause(500)
+    if (sprites.readDataBoolean(otherSprite, "life") || sprites.readDataBoolean(otherSprite, "life2")) {
+        pause(100)
+    } else {
+        music.powerDown.play()
+        info.changeLifeBy(-1)
+        pause(500)
+    }
 })
 sprites.onOverlap(SpriteKind.theflash, SpriteKind.gost, function (sprite, otherSprite) {
     otherSprite.follow(the_payer_1, 0)
@@ -98,7 +167,7 @@ sprites.onOverlap(SpriteKind.theflash, SpriteKind.gost, function (sprite, otherS
 . . . . . . . . . . . . . . . . 
 `)
     sprites.setDataBoolean(otherSprite, "life", true)
-    pause(1000)
+    pause(2000)
     sprites.setDataBoolean(otherSprite, "life", false)
     otherSprite.setImage(img`
 . . . . . . . . . . . . . . . . 
@@ -142,6 +211,36 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     the_payer_1.image.flipX()
     x = true
 })
+function level_1 () {
+    game.splash("git all coins and", "defeat all goats ")
+    scene.setBackgroundColor(15)
+    tiles.setTilemap(tiles.createTilemap(
+            hex`3200100008020202020203141414141414141403000000000000000000000000000000000000000000000000000000000000000000000d050505051304050505050505050515000000000000000000000000000000000000000000000000000000000000000000000d05050505050b050505050505050515000000000000000000000000000000000000000000000000000000000000000000000d141111111111030c0c0c1705050515000000000000000000000000000000000000000000000000000000000000000000000d050505050505040814031605050515000000000000000000000000000000000000000000000000000000000000000000000d050505050505040d13041605050515081414141414141414030814140300000000000000000000000000000000000000001b050505050505040d050416050505150d1313131313131324041613290400000000000000000000000000000000000000001b02020202020202060504070c180c0a0d1322131313132225261613130400000000000000000000000000000000000000001b050505050505050505150814141414060505050505050524041613130400000000000000000000000000000000000000000d050505050505050505150d1305130505050505050505050526051313040000000000000000000000000000000000000000070c0c0c0c0c0c0c0c0c0a070c0c0c0c170505050505050524041613130400000000000000000000000000000000000000000802020202020202141414141402020316050505050505052526070c0c0a00000000000000000000000000000000000000000d130513051305131d1d1d1d1d051304160505050505050524040000000000000000000000000000000000000000000000000d051305130513051f1f1f1f1f132205120505050505050525260000000000000000000000000000000000000000000000000d130513051305131e1e1e1e1e05130416050505050505052404000000000000000000000000000000000000000000000000070c0c0c0c0c0c0c0c0c0c0c0c0c0c0a070c0c0c0c0c0c0c0c0a000000000000000000000000000000000000000000000000`,
+            img`
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . 2 . . . . . . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . 2 2 2 2 2 2 2 2 2 2 . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . 2 2 2 2 2 . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . 2 2 . 2 2 . . . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . 2 2 . 2 2 . . . 2 2 . . . . . . . . 2 2 . . 2 . . . . . . . . . . . . . . . . . . . . 
+. 2 2 2 2 2 2 2 2 . 2 2 2 2 2 2 2 . . . . . . . . 2 2 . . 2 . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . 2 2 2 2 2 2 2 . . . . . . . . 2 2 . . 2 . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . . . 2 2 . . . . . . . . . . . . . . . . . 2 . . . . . . . . . . . . . . . . . . . . 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . 2 2 . . 2 . . . . . . . . . . . . . . . . . . . . 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . 2 2 2 2 2 . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . 2 2 . . . . . . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . . . . . . . . . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . 2 2 . . . . . . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . . . . . . . . . . . . . . . . . 
+`,
+            [myTiles.tile0,sprites.dungeon.greenOuterNorth0,sprites.dungeon.purpleOuterNorth1,sprites.dungeon.purpleOuterNorthEast,sprites.dungeon.purpleOuterEast0,sprites.dungeon.floorDark2,sprites.dungeon.purpleInnerSouthEast,sprites.dungeon.purpleOuterSouthEast,sprites.dungeon.purpleOuterNorthWest,sprites.dungeon.purpleInnerNorthWest,sprites.dungeon.purpleOuterSouthWest,sprites.dungeon.stairLarge,sprites.dungeon.purpleOuterSouth1,sprites.dungeon.purpleOuterWest0,sprites.dungeon.floorLight2,sprites.dungeon.floorDark5,sprites.dungeon.stairEast,sprites.dungeon.purpleOuterNorth2,sprites.dungeon.floorMixed,sprites.dungeon.floorDark0,sprites.dungeon.purpleOuterNorth0,sprites.dungeon.purpleOuterEast1,sprites.dungeon.purpleOuterWest1,sprites.dungeon.purpleInnerNorthEast,sprites.dungeon.doorOpenSouth,sprites.dungeon.purpleInnerSouthWest,sprites.dungeon.purpleOuterSouth2,sprites.dungeon.purpleOuterWest2,sprites.dungeon.floorLight5,sprites.dungeon.darkGroundNorth,sprites.dungeon.darkGroundSouth,sprites.dungeon.darkGroundCenter,sprites.dungeon.purpleOuterSouth0,sprites.dungeon.doorOpenEast,sprites.dungeon.floorDarkDiamond,sprites.dungeon.floorLightMoss,sprites.dungeon.floorLight3,sprites.dungeon.floorDark3,sprites.dungeon.purpleOuterEast2,sprites.dungeon.purpleSwitchUp,sprites.dungeon.collectibleRedCrystal,sprites.dungeon.collectibleInsignia,sprites.dungeon.floorDark1,myTiles.tile1,myTiles.tile2,myTiles.tile3],
+            TileScale.Sixteen
+        ))
+    tiles.placeOnTile(the_player_2, tiles.getTileLocation(5, 5))
+    tiles.placeOnTile(the_payer_1, tiles.getTileLocation(4, 5))
+    coins()
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.theflash, function (sprite, otherSprite) {
     if (x) {
         otherSprite.setImage(img`
@@ -192,6 +291,35 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.coin, function (sprite, otherSpr
     info.changeScoreBy(1)
     music.baDing.play()
 })
+function level_2 () {
+    scene.setBackgroundColor(15)
+    tiles.setTilemap(tiles.createTilemap(
+            hex`3200100008111111111111110308141414141414030000000000000000000000000000000000000000000000000000000000000000001b13050505050513260d130513130513150000000000000000000000000000000000000000000000000000000000000000001b05050505050505260d050505050505150000000000000000000000000000000000000000000000000000000000000000001b05050513050505150d050505050505150000000814141414141414141414141414141414141403000000000000000000001b05050505050505150d050513130505150000000d22051305051313050505130522050505050515000000000000000000001b13050505050513260d050505050505150000000d0505050505050505050505050509170509051500000000000000000000071a1a1a1a1a1a1a0a0d050505050505150000000d05050505050505050505050505150d05150515000000000000000000000814141414141414030d130513130513150000000d05050505050505050505050505150d05150519020202000000000000000d0505050505050515070c171212090c0a0000000811111411111114111114141111030d05150505050505000000000000000d131313131313131914140605051914141414030d05050505050505050505050505260d05190202020202000000000000000d050505050505050505050505050505050505040d05050505050505050505050505260d05050505050505000000000000000d050505050505050505050505050505050505050505050505050505050505050505150d05081414141414000000000000000d050505050505050505050505050505050505050505050505050505050505050505260d050d0000000000000000000000000d050505050505050505050505050505050505041b05050505050505050505050505260d050d0000000000000000000000000d220505050505220505050505052205050522041b05050505050505050505050505150d130d000000000000000000000000070c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0a070c0c1a1a0c0c1a1a0c0c1a1a0c0a070c07000000000000000000000000`,
+            img`
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . 2 2 . . . . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . 2 2 . . . . . . 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . . 2 . . . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . . . 
+2 . . . . . . . . . . . . . . . 2 . . . 2 . . . . . . . . . . . . . . . . . . 2 . . . . . . . . . . 
+2 . . . . . . . 2 2 . . . . . . 2 . . . 2 . . . . . . . . . . . . . 2 2 . 2 . 2 . . . . . . . . . . 
+2 2 2 2 2 2 2 2 2 2 . . . . . . 2 . . . 2 . . . . . . . . . . . . . 2 2 . 2 . 2 . . . . . . . . . . 
+2 2 2 2 2 2 2 2 2 2 . . . . . . 2 . . . 2 . . . . . . . . . . . . . 2 2 . 2 . 2 2 2 2 . . . . . . . 
+2 . . . . . . . 2 2 2 2 . . 2 2 2 . . . 2 2 2 2 2 . 2 2 2 2 2 2 2 2 2 2 . 2 . . . . . . . . . . . . 
+2 . . . . . . . 2 2 2 2 . . 2 2 2 2 2 2 2 . . . . . . . . . . . . . 2 2 . 2 2 2 2 2 2 . . . . . . . 
+2 . . . . . . . . . . . . . . . . . . 2 2 . . . . . . . . . . . . . 2 2 . . . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2 2 . 2 2 2 2 2 2 . . . . . . . 
+2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2 2 . 2 . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . . . . . 2 2 . . . . . . . . . . . . . 2 2 . 2 . . . . . . . . . . . . 
+2 . . . . . . . . . . . . . . . . . . 2 2 . . . . . . . . . . . . . 2 2 . 2 . . . . . . . . . . . . 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . . . . . . . . . . . . 
+`,
+            [myTiles.tile0,sprites.dungeon.greenOuterNorth0,sprites.dungeon.purpleOuterNorth1,sprites.dungeon.purpleOuterNorthEast,sprites.dungeon.purpleOuterEast0,sprites.dungeon.floorDark2,sprites.dungeon.purpleInnerSouthEast,sprites.dungeon.purpleOuterSouthEast,sprites.dungeon.purpleOuterNorthWest,sprites.dungeon.purpleInnerNorthWest,sprites.dungeon.purpleOuterSouthWest,sprites.dungeon.stairLarge,sprites.dungeon.purpleOuterSouth1,sprites.dungeon.purpleOuterWest0,sprites.dungeon.floorLight2,sprites.dungeon.floorDark5,sprites.dungeon.stairEast,sprites.dungeon.purpleOuterNorth2,sprites.dungeon.floorMixed,sprites.dungeon.floorDark0,sprites.dungeon.purpleOuterNorth0,sprites.dungeon.purpleOuterEast1,sprites.dungeon.purpleOuterWest1,sprites.dungeon.purpleInnerNorthEast,sprites.dungeon.doorOpenSouth,sprites.dungeon.purpleInnerSouthWest,sprites.dungeon.purpleOuterSouth2,sprites.dungeon.purpleOuterWest2,sprites.dungeon.floorLight5,sprites.dungeon.darkGroundNorth,sprites.dungeon.darkGroundSouth,sprites.dungeon.darkGroundCenter,sprites.dungeon.purpleOuterSouth0,sprites.dungeon.doorOpenEast,sprites.dungeon.floorDarkDiamond,sprites.dungeon.floorLightMoss,sprites.dungeon.floorLight3,sprites.dungeon.floorDark3,sprites.dungeon.purpleOuterEast2,sprites.dungeon.purpleSwitchUp,sprites.dungeon.collectibleRedCrystal,sprites.dungeon.collectibleInsignia,sprites.dungeon.floorDark1,myTiles.tile1,myTiles.tile2,myTiles.tile3],
+            TileScale.Sixteen
+        ))
+    tiles.placeOnTile(the_player_2, tiles.getTileLocation(4, 2))
+    tiles.placeOnTile(the_payer_1, tiles.getTileLocation(3, 2))
+    coins()
+}
 controller.player2.onButtonEvent(ControllerButton.Left, ControllerButtonEvent.Pressed, function () {
     the_player_2.setImage(img`
 . . . . . . . . . . . . . . . . 
@@ -212,6 +340,7 @@ controller.player2.onButtonEvent(ControllerButton.Left, ControllerButtonEvent.Pr
 . . 6 6 6 6 . . . 6 6 6 6 . . . 
 `)
     the_player_2.image.flipX()
+    x = true
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     the_payer_1.setImage(img`
@@ -234,6 +363,40 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 `)
     x = false
 })
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (sprite, location) {
+    tiles.setTileAt(location, sprites.dungeon.floorDark2)
+    for (let value of tiles.getTilesByType(sprites.dungeon.floorDarkDiamond)) {
+        gaost = sprites.create(img`
+. . . . . . . . . . . . . . . . 
+. . . . . . 7 7 7 7 7 . . . . . 
+. . . . . 7 7 7 7 7 7 7 . . . . 
+. . . . . 7 6 1 7 6 1 7 . . . . 
+. . . . . 7 6 1 7 6 1 7 . . . . 
+. . . . . 7 7 7 7 7 7 7 . . . . 
+. . . . 7 7 7 7 7 7 7 6 . . . . 
+. . . 7 7 7 7 7 7 7 6 6 . . . . 
+. 7 7 7 . 7 7 7 6 6 6 7 . . . . 
+. 7 7 . . 7 7 7 6 6 7 7 . . . . 
+. . . . . . 7 7 7 7 7 . . . . . 
+. . . . . . . 7 7 7 . . . . . . 
+. . . . . . . . 7 . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, SpriteKind.gost)
+        tiles.placeOnTile(gaost, value)
+        gaost.follow(the_payer_1, 40)
+        tiles.setTileAt(value, sprites.dungeon.floorDark2)
+    }
+})
+sprites.onOverlap(SpriteKind.gost, SpriteKind.gost, function (sprite, otherSprite) {
+    sprite.x += 1
+    otherSprite.x += -1
+})
+scene.onOverlapTile(SpriteKind.Player, myTiles.tile2, function (sprite, location) {
+    level = "level_2"
+    level_2()
+})
 controller.player2.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.Pressed, function () {
     the_player_2.setImage(img`
 . . . . . . . . . . . . . . . . 
@@ -253,6 +416,7 @@ controller.player2.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.P
 . . . 6 6 6 . . . 6 6 6 . . . . 
 . . 6 6 6 6 . . . 6 6 6 6 . . . 
 `)
+    x = false
 })
 function coins () {
     for (let value of tiles.getTilesByType(sprites.dungeon.floorDark0)) {
@@ -270,23 +434,24 @@ c d d 1 1 d d c
     }
 }
 sprites.onOverlap(SpriteKind.uper, SpriteKind.gost, function (sprite, otherSprite) {
-    if (sprites.readDataBoolean(otherSprite, "life")) {
-        otherSprite.follow(the_payer_1, -40)
-        sprites.setDataBoolean(otherSprite, "life", false)
-        sprites.setDataBoolean(otherSprite, "life2", true)
-        pause(500)
-    }
     if (sprites.readDataBoolean(otherSprite, "life2")) {
         otherSprite.destroy()
         music.baDing.play()
         info.changeScoreBy(1)
     }
+    if (sprites.readDataBoolean(otherSprite, "life")) {
+        otherSprite.follow(the_payer_1, -60)
+        sprites.setDataBoolean(otherSprite, "life", false)
+        sprites.setDataBoolean(otherSprite, "life2", true)
+        pause(1000)
+    }
 })
-let gaost: Sprite = null
 let on_flash = false
 let shado: Sprite = null
 let the_coin: Sprite = null
+let gaost: Sprite = null
 let x = false
+let level = ""
 let the_player_2: Sprite = null
 let the_payer_1: Sprite = null
 info.setLife(10)
@@ -347,33 +512,6 @@ the_payer_1 = sprites.create(img`
 . . e e e e . . . e e e e . . . 
 `, SpriteKind.Player)
 controller.moveSprite(the_payer_1, 100, 100)
-scene.setBackgroundColor(15)
-tiles.setTilemap(tiles.createTilemap(
-            hex`10001000080202020202031414141414141414030d0505050513040505050505050505150d05050505050b0505050505050505150d141111111111030c0c0c17050505150d0505050505050408140316050505150d050505050505040d130416050505151b050505050505040d050416050505151b02020202020202060504070c180c0a1b0505050505050505051500000000000d050505050505050505150000000000070c0c0c0c0c0c0c0c0c0a0000000000080202020202020200000000000202030d130513051305131d1d1d1d1d0513040d051305130513051f1f1f1f1f1305040d130513051305131e1e1e1e1e051304070c0c0c0c0c0c0c00000000000c0c0a`,
-            img`
-2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-2 . . . . . 2 . . . . . . . . 2 
-2 . . . . . . . . . . . . . . 2 
-2 . 2 2 2 2 2 2 2 2 2 2 . . . 2 
-2 . . . . . . 2 2 2 2 2 . . . 2 
-2 . . . . . . 2 2 . 2 2 . . . 2 
-. . . . . . . 2 2 . 2 2 . . . 2 
-. 2 2 2 2 2 2 2 2 . 2 2 2 2 2 2 
-. . . . . . . . . . 2 . . . . . 
-2 . . . . . . . . . 2 . . . . . 
-2 2 2 2 2 2 2 2 2 2 2 . . . . . 
-2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-2 . . . . . . . . . . . . . . 2 
-2 . . . . . . . . . . . . . . 2 
-2 . . . . . . . . . . . . . . 2 
-2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-`,
-            [myTiles.tile0,sprites.dungeon.greenOuterNorth0,sprites.dungeon.purpleOuterNorth1,sprites.dungeon.purpleOuterNorthEast,sprites.dungeon.purpleOuterEast0,sprites.dungeon.floorDark2,sprites.dungeon.purpleInnerSouthEast,sprites.dungeon.purpleOuterSouthEast,sprites.dungeon.purpleOuterNorthWest,sprites.dungeon.purpleInnerNorthWest,sprites.dungeon.purpleOuterSouthWest,sprites.dungeon.stairLarge,sprites.dungeon.purpleOuterSouth1,sprites.dungeon.purpleOuterWest0,sprites.dungeon.floorLight2,sprites.dungeon.floorDark5,sprites.dungeon.stairEast,sprites.dungeon.purpleOuterNorth2,sprites.dungeon.floorMixed,sprites.dungeon.floorDark0,sprites.dungeon.purpleOuterNorth0,sprites.dungeon.purpleOuterEast1,sprites.dungeon.purpleOuterWest1,sprites.dungeon.purpleInnerNorthEast,sprites.dungeon.doorOpenSouth,sprites.dungeon.purpleInnerSouthWest,sprites.dungeon.purpleOuterSouth2,sprites.dungeon.purpleOuterWest2,sprites.dungeon.floorLight5,sprites.dungeon.darkGroundNorth,sprites.dungeon.darkGroundSouth,sprites.dungeon.darkGroundCenter],
-            TileScale.Sixteen
-        ))
-tiles.placeOnTile(the_payer_1, tiles.getTileLocation(4, 5))
-scene.cameraFollowSprite(the_payer_1)
-coins()
 if (game.ask("2 players")) {
     the_player_2 = sprites.create(img`
 . . . . . . . . . . . . . . . . 
@@ -394,8 +532,93 @@ if (game.ask("2 players")) {
 . . 6 6 6 6 . . . 6 6 6 6 . . . 
 `, SpriteKind.Player)
     controller.player2.moveSprite(the_player_2)
-    tiles.placeOnTile(the_player_2, tiles.getTileLocation(5, 5))
 }
+tiles.setTilemap(tiles.createTilemap(
+            hex`10001000010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010606060606060606060606060606080105050505050505050505050505050901070707070707070707070707050509010101010101010101010101010a0509010101010101010101010101010a0509010101010c0e0e0e0e0e0e0e0e0e170e0d0101011017171710171717101717170f01010110171b17101a1717101718170f0101010b151515151515151515151513`,
+            img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . 2 2 2 2 2 2 2 2 2 2 . 2 2 
+. . . 2 . . . 2 . . . 2 . . . 2 
+. . . 2 . . . 2 . . . 2 . . . 2 
+. . . 2 2 2 2 2 2 2 2 2 2 2 2 2 
+`,
+            [myTiles.tile0,sprites.castle.tileDarkGrass3,sprites.castle.tileDarkGrass2,sprites.castle.tileGrass1,sprites.castle.tileDarkGrass1,sprites.castle.tilePath5,sprites.castle.tilePath2,sprites.castle.tilePath8,sprites.castle.tilePath3,sprites.castle.tilePath6,sprites.castle.tilePath4,sprites.dungeon.greenInnerSouthWest,sprites.dungeon.greenInnerNorthWest,sprites.dungeon.greenInnerNorthEast,sprites.dungeon.greenOuterSouth0,sprites.dungeon.greenOuterWest1,sprites.dungeon.greenOuterEast0,sprites.dungeon.greenOuterSouthEast,sprites.dungeon.greenOuterSouthWest,sprites.dungeon.greenInnerSouthEast,sprites.dungeon.greenOuterSouth1,sprites.dungeon.greenOuterNorth0,sprites.dungeon.floorLight2,sprites.dungeon.floorDark2,myTiles.tile1,sprites.dungeon.greenOuterNorthWest,myTiles.tile2,myTiles.tile3],
+            TileScale.Sixteen
+        ))
+scene.cameraFollowSprite(the_payer_1)
+if (blockSettings.exists("level_1")) {
+    tiles.setTilemap(tiles.createTilemap(
+            hex`10001000010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010606060606060606060606060606080105050505050505050505050505050901070707070707070707070707050509010101010101010101010101010a0509010101010101010101010101010a0509010101010c0e0e0e0e0e0e0e0e0e170e0d0101011017171710171717171717170f01010110171b17101a1717171717180f0101010b151515151515151515151513`,
+            img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . 2 2 2 2 2 2 2 2 2 2 . 2 2 
+. . . 2 . . . 2 . . . . . . . 2 
+. . . 2 . . . 2 . . . . . . . 2 
+. . . 2 2 2 2 2 2 2 2 2 2 2 2 2 
+`,
+            [myTiles.tile0,sprites.castle.tileDarkGrass3,sprites.castle.tileDarkGrass2,sprites.castle.tileGrass1,sprites.castle.tileDarkGrass1,sprites.castle.tilePath5,sprites.castle.tilePath2,sprites.castle.tilePath8,sprites.castle.tilePath3,sprites.castle.tilePath6,sprites.castle.tilePath4,sprites.dungeon.greenInnerSouthWest,sprites.dungeon.greenInnerNorthWest,sprites.dungeon.greenInnerNorthEast,sprites.dungeon.greenOuterSouth0,sprites.dungeon.greenOuterWest1,sprites.dungeon.greenOuterEast0,sprites.dungeon.greenOuterSouthEast,sprites.dungeon.greenOuterSouthWest,sprites.dungeon.greenInnerSouthEast,sprites.dungeon.greenOuterSouth1,sprites.dungeon.greenOuterNorth0,sprites.dungeon.floorLight2,sprites.dungeon.floorDark2,myTiles.tile1,sprites.dungeon.greenOuterNorthWest,myTiles.tile2,myTiles.tile3],
+            TileScale.Sixteen
+        ))
+}
+game.onUpdate(function () {
+    if (the_payer_1.tileKindAt(TileDirection.Center, sprites.dungeon.collectibleInsignia)) {
+        if (info.score() >= 43) {
+            blockSettings.writeNumber(level, 1)
+            game.over(true)
+        }
+    }
+})
+forever(function () {
+    if (controller.player2.isPressed(ControllerButton.A)) {
+        if (flash) {
+            shado = sprites.create(img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . 1 . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, SpriteKind.shado)
+            shado.setPosition(the_player_2.x, the_player_2.y)
+            shado.y += 3
+            shado.setVelocity(20, 0)
+            pause(100)
+            shado.destroy()
+        }
+    }
+})
 forever(function () {
     if (controller.A.isPressed()) {
         if (flash) {
@@ -423,6 +646,22 @@ forever(function () {
             pause(100)
             shado.destroy()
         }
+    }
+})
+forever(function () {
+    if (controller.player2.isPressed(ControllerButton.A)) {
+        on_flash = true
+        pause(200)
+        on_flash = false
+        flash.setPosition(the_player_2.x, the_player_2.y)
+        flash.y += 3
+        flash.setFlag(SpriteFlag.Invisible, false)
+        flash.setFlag(SpriteFlag.Ghost, false)
+        controller.moveSprite(the_payer_1, 0, 0)
+        pause(200)
+        flash.setFlag(SpriteFlag.Invisible, true)
+        flash.setFlag(SpriteFlag.Ghost, true)
+        controller.moveSprite(the_payer_1, 100, 100)
     }
 })
 forever(function () {
@@ -474,6 +713,22 @@ forever(function () {
 forever(function () {
     if (controller.B.isPressed()) {
         suker.setPosition(the_payer_1.x, the_payer_1.y)
+        suker.y += 3
+        suker.setFlag(SpriteFlag.Invisible, false)
+        suker.setFlag(SpriteFlag.Ghost, false)
+        controller.moveSprite(the_payer_1, 0, 0)
+        while (controller.B.isPressed()) {
+            pause(1)
+        }
+        suker.setFlag(SpriteFlag.Invisible, true)
+        suker.setFlag(SpriteFlag.Ghost, true)
+        controller.moveSprite(the_payer_1, 100, 100)
+        pause(200)
+    }
+})
+forever(function () {
+    if (controller.player2.isPressed(ControllerButton.B)) {
+        suker.setPosition(the_player_2.x, the_player_2.y)
         suker.y += 3
         suker.setFlag(SpriteFlag.Invisible, false)
         suker.setFlag(SpriteFlag.Ghost, false)
