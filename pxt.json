@@ -1,5 +1,5 @@
 {
-    "name": "lueges caste ",
+    "name": "Luigi's caste ",
     "dependencies": {
         "device": "*",
         "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.0.5",
