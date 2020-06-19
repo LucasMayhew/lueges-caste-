@@ -1,5 +1,6 @@
 {
     "name": "Luigi's caste ",
+    "description": "",
     "dependencies": {
         "device": "*",
         "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.0.5",
@@ -7,14 +8,16 @@
         "pxt-lantern": "github:riknoll/pxt-lantern#v0.1.1",
         "story": "github:riknoll/arcade-story#v1.1.2"
     },
-    "description": "",
     "files": [
         "main.blocks",
         "main.ts",
         "README.md"
     ],
-    "preferredEditor": "blocksprj",
     "testFiles": [
         "test.ts"
-    ]
+    ],
+    "supportedTargets": [
+        "arcade"
+    ],
+    "preferredEditor": "blocksprj"
 }
